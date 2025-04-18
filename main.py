@@ -1,6 +1,6 @@
 from openai import OpenAI
-client = OpenAI(api_key="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")
-# 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
+key = open("key.txt").readlines()[0]
+client = OpenAI(api_key=key)
 response = client.responses.create(
     model="gpt-4.1",
     input=[
