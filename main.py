@@ -1,20 +1,21 @@
 from openai import OpenAI
 key = open("key.txt").readlines()[0]
 client = OpenAI(api_key=key)
+StructuredArray = []
+UserInput = input("[!] ")
+
+StructuredArray.append({"role": "system", "content": "Do not use any formatting or markdown languages. Use only natural lagnuage"})
+StructuredArray.append({"role": "user", "content": UserInput})
 response = client.responses.create(
     model="gpt-4.1",
-    input=[
-        {"role": "user", "content": "what teams are playing in this image?"},
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "input_image",
-                    "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/3b/LeBron_James_Layup_%28Cleveland_vs_Brooklyn_2018%29.jpg"
-                }
-            ]
-        }
-    ]
+    input=StructuredArray
 )
 
+StructuredArray.append({"role": "system", "content": response.output_text})
+
 print(response.output_text)
+while True:
+    UserInput = input("[!] ")
+    StructuredArray.append({"role": "user", "content": UserInput})
+    print(response.output_text)
+    StructuredArray.append({"role": "system", "content": response.output_text})
